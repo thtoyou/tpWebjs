@@ -2,8 +2,8 @@ const editingMode = {rect: 0, line: 1};
 
 function Pencil(ctx, drawing, canvas) {
     this.currEditingMode = editingMode.line;
-    this.currLineWidth = 5;
-    this.currColour = '#000000';
+    this.currLineWidth = document.getElementById('spinnerWidth').value;
+    this.currColour = document.getElementById('colour').value;
     this.currentShape = 0;
     this.generatedid = 0;
     document.getElementById('butRect').onclick = (_) => this.currEditingMode = editingMode.rect;
@@ -36,26 +36,25 @@ function Pencil(ctx, drawing, canvas) {
     this.onInteractionEnd = function (DnD) {
         if (this.currentShape != 0) {
             let shapeId = this.generateId();
-            console.log('shapeID:');
-            console.log(shapeId);
-            console.log('shape:');
             console.log(this.currentShape);
             drawing.shapeArray.set(shapeId, this.currentShape);
             drawing.paint(ctx, canvas);
             updateShapeList(shapeId, this.currentShape);
             this.currentShape.paint(ctx);
-            document.getElementById("remove" + shapeId).onclick = (event) => this.remove(drawing, event.currentTarget.id.substring(6), ctx, canvas);
+            document.getElementById("remove" + shapeId).onclick = 
+                (event) => this.remove(drawing, event.currentTarget.id.substring(6), ctx, canvas);
 
         }
         this.currentShape = 0;
     }.bind(this);
+
     this.generateId = function () {
         this.generatedid++;
         return this.generatedid;
     }
     this.remove = function (drawing, id, ctx, canvas) {
-        drawing.shapeArray.delete(id);
-        document.getElementById("liRemove" + id).remove();
+        drawing.shapeArray.delete(parseInt(id));
+        document.getElementById("liRemove" + id).remove();// enleve le texte associé au bouton de suppression
         drawing.paint(ctx, canvas);
     }
     // Liez ici les widgets à la classe pour modifier les attributs présents ci-dessus.
